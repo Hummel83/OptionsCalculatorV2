@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms.VisualStyles;
 
 namespace OptionsCalculatorV2.BlackScholes
 {
@@ -45,6 +46,20 @@ namespace OptionsCalculatorV2.BlackScholes
 
             return NdOne;
         }
+
+        private double calculateDTwo(double underlyingPrice, double strikePrice, double time, double interest, double volatility, double dividend)
+        {
+            double DOne = this.calculateDOne(underlyingPrice, strikePrice, time, interest, volatility, dividend) - volatility * Math.Sqrt(time);
+
+            return DOne;
+        }
+
+        private double calculateNdTwo(double underlyingPrice, double strikePrice, double time, double interest, double volatility, double dividend)
+        {
+            double NdTwo = NormSDist.N(this.calculateDTwo(underlyingPrice, strikePrice, time, interest, volatility, dividend));
+
+            return NdTwo;
+        }
         
         /// <param name="underlyingPrice">Default is used if no param is given</param>
         /// <returns></returns>
@@ -57,9 +72,24 @@ namespace OptionsCalculatorV2.BlackScholes
 
         public double getGamma(double underlyingPrice = 0)
         {
+            if (underlyingPrice == 0) underlyingPrice = this.underlyingPrice;
+            
             double gamma = this.calculateNdOne(underlyingPrice, strikePrice, YTE, riskFreeRate, historicalVolatility, dividendYield);
 
             return gamma;
+        }
+
+        public double getTheta(double underlyingPrice = 0, double YTE = 0)
+        {
+            if (underlyingPrice == 0) underlyingPrice = this.underlyingPrice;
+            if (YTE == 0) YTE = this.YTE;
+            
+            double ndOne = this.calculateNdOne(underlyingPrice, strikePrice, YTE, riskFreeRate, historicalVolatility, dividendYield);
+            double ndTwo = this.calculateNdTwo(underlyingPrice, strikePrice, YTE, riskFreeRate, historicalVolatility, dividendYield);
+            
+            double theta = -(underlyingPrice * historicalVolatility * ndOne) / (2 * Math.Sqrt(YTE)) - riskFreeRate * strikePrice * Math.Pow(-riskFreeRate * (YTE), 2) * ndTwo;
+
+            return theta / 365;
         }
     }
 }
