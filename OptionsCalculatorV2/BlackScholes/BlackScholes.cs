@@ -36,6 +36,15 @@ namespace OptionsCalculatorV2.BlackScholes
 
             return dOne;
         }
+
+        private double calculateNdOne(double underlyingPrice, double strikePrice, double time, double interest, double volatility, double dividend)
+        {
+            double dOne = this.calculateDOne(underlyingPrice, strikePrice, time, interest, volatility, dividend);
+            
+            double NdOne = Math.Exp(-(Math.Pow(dOne, 2) / 2)) / (Math.Sqrt(2 * Math.PI));
+
+            return NdOne;
+        }
         
         /// <param name="underlyingPrice">Default is used if no param is given</param>
         /// <returns></returns>
@@ -44,6 +53,13 @@ namespace OptionsCalculatorV2.BlackScholes
             double delta = NormSDist.N(calculateDOne(underlyingPrice, strikePrice, YTE, riskFreeRate, historicalVolatility, dividendYield));
 
             return delta;
+        }
+
+        public double getGamma(double underlyingPrice = 0)
+        {
+            double gamma = this.calculateNdOne(underlyingPrice, strikePrice, YTE, riskFreeRate, historicalVolatility, dividendYield);
+
+            return gamma;
         }
     }
 }

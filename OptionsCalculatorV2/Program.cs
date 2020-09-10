@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms.VisualStyles;
-using Microsoft.Office.Interop.Excel;
-using OptionsCalculatorV2.BlackScholes;
 using Application = System.Windows.Forms.Application;
 
 namespace OptionsCalculatorV2
