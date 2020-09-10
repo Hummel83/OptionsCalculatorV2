@@ -23,3 +23,27 @@ namespace OptionsCalculatorV2.BlackScholes
             this.dividendYield = dividendYield / 100;
         }
         
+        /// <param name="underlyingPrice"></param>
+        /// <param name="strikePrice"></param>
+        /// <param name="time">MUST BE IN YEARS!!!</param>
+        /// <param name="interest"></param>
+        /// <param name="volatility"></param>
+        /// <param name="dividend"></param>
+        /// <returns></returns>
+        private double calculateDOne(double underlyingPrice, double strikePrice, double time, double interest, double volatility, double dividend)
+        {
+            double dOne = (Math.Log(underlyingPrice / strikePrice) + (interest - dividend + 0.5 * Math.Pow(volatility, 2)) * time) / (volatility * Math.Sqrt(time));
+
+            return dOne;
+        }
+        
+        /// <param name="underlyingPrice">Default is used if no param is given</param>
+        /// <returns></returns>
+        public double getDelta(double underlyingPrice = 0)
+        {
+            double delta = NormSDist.N(calculateDOne(underlyingPrice, strikePrice, YTE, riskFreeRate, historicalVolatility, dividendYield));
+
+            return delta;
+        }
+    }
+}
