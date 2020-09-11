@@ -55,6 +55,9 @@
       this.diagramMaxPriceInput = new System.Windows.Forms.TextBox();
       this.label2 = new System.Windows.Forms.Label();
       this.thetaDecay = new System.Windows.Forms.DataVisualization.Charting.Chart();
+      this.label3 = new System.Windows.Forms.Label();
+      this.ratioInput = new System.Windows.Forms.TextBox();
+      this.label4 = new System.Windows.Forms.Label();
       ((System.ComponentModel.ISupportInitialize) (this.chart1)).BeginInit();
       ((System.ComponentModel.ISupportInitialize) (this.thetaDecay)).BeginInit();
       this.SuspendLayout();
@@ -63,12 +66,13 @@
       // 
       this.chart1.BackColor = System.Drawing.Color.DimGray;
       chartArea1.Area3DStyle.LightStyle = System.Windows.Forms.DataVisualization.Charting.LightStyle.Realistic;
+      chartArea1.AxisX.Title = "Underlying-Price";
       chartArea1.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (64)))), ((int) (((byte) (64)))), ((int) (((byte) (64)))));
       chartArea1.Name = "ChartArea1";
       this.chart1.ChartAreas.Add(chartArea1);
       legend1.Name = "Legend1";
       this.chart1.Legends.Add(legend1);
-      this.chart1.Location = new System.Drawing.Point(12, 256);
+      this.chart1.Location = new System.Drawing.Point(12, 288);
       this.chart1.Name = "chart1";
       series1.ChartArea = "ChartArea1";
       series1.Color = System.Drawing.Color.Gold;
@@ -99,88 +103,94 @@
       // label7
       // 
       this.label7.AutoSize = true;
-      this.label7.Location = new System.Drawing.Point(12, 9);
+      this.label7.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+      this.label7.Location = new System.Drawing.Point(12, 13);
       this.label7.Name = "label7";
-      this.label7.Size = new System.Drawing.Size(81, 13);
+      this.label7.Size = new System.Drawing.Size(96, 16);
       this.label7.TabIndex = 1;
       this.label7.Text = "UnderlyingPrice";
       // 
       // label8
       // 
       this.label8.AutoSize = true;
-      this.label8.Location = new System.Drawing.Point(12, 113);
+      this.label8.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+      this.label8.Location = new System.Drawing.Point(12, 117);
       this.label8.Name = "label8";
-      this.label8.Size = new System.Drawing.Size(78, 13);
+      this.label8.Size = new System.Drawing.Size(93, 16);
       this.label8.TabIndex = 2;
       this.label8.Text = "Risk-Free-Rate";
       // 
       // label9
       // 
       this.label9.AutoSize = true;
-      this.label9.Location = new System.Drawing.Point(12, 139);
+      this.label9.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+      this.label9.Location = new System.Drawing.Point(12, 143);
       this.label9.Name = "label9";
-      this.label9.Size = new System.Drawing.Size(75, 13);
+      this.label9.Size = new System.Drawing.Size(88, 16);
       this.label9.TabIndex = 3;
       this.label9.Text = "Dividend-Yield";
       // 
       // label10
       // 
       this.label10.AutoSize = true;
-      this.label10.Location = new System.Drawing.Point(12, 87);
+      this.label10.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+      this.label10.Location = new System.Drawing.Point(12, 91);
       this.label10.Name = "label10";
-      this.label10.Size = new System.Drawing.Size(91, 13);
+      this.label10.Size = new System.Drawing.Size(112, 16);
       this.label10.TabIndex = 4;
       this.label10.Text = "Historical Volatility";
       // 
       // label11
       // 
       this.label11.AutoSize = true;
-      this.label11.Location = new System.Drawing.Point(12, 61);
+      this.label11.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+      this.label11.Location = new System.Drawing.Point(12, 65);
       this.label11.Name = "label11";
-      this.label11.Size = new System.Drawing.Size(29, 13);
+      this.label11.Size = new System.Drawing.Size(31, 16);
       this.label11.TabIndex = 5;
       this.label11.Text = "DTE";
       // 
       // label12
       // 
       this.label12.AutoSize = true;
-      this.label12.Location = new System.Drawing.Point(12, 35);
+      this.label12.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+      this.label12.Location = new System.Drawing.Point(12, 39);
       this.label12.Name = "label12";
-      this.label12.Size = new System.Drawing.Size(61, 13);
+      this.label12.Size = new System.Drawing.Size(74, 16);
       this.label12.TabIndex = 6;
       this.label12.Text = "Strike-Price";
       // 
       // underlyingPriceInput
       // 
-      this.underlyingPriceInput.Location = new System.Drawing.Point(114, 6);
+      this.underlyingPriceInput.Location = new System.Drawing.Point(130, 12);
       this.underlyingPriceInput.Name = "underlyingPriceInput";
       this.underlyingPriceInput.Size = new System.Drawing.Size(156, 20);
       this.underlyingPriceInput.TabIndex = 7;
       // 
       // strikePriceInput
       // 
-      this.strikePriceInput.Location = new System.Drawing.Point(114, 32);
+      this.strikePriceInput.Location = new System.Drawing.Point(130, 38);
       this.strikePriceInput.Name = "strikePriceInput";
       this.strikePriceInput.Size = new System.Drawing.Size(156, 20);
       this.strikePriceInput.TabIndex = 8;
       // 
       // dteInput
       // 
-      this.dteInput.Location = new System.Drawing.Point(114, 58);
+      this.dteInput.Location = new System.Drawing.Point(130, 64);
       this.dteInput.Name = "dteInput";
       this.dteInput.Size = new System.Drawing.Size(156, 20);
       this.dteInput.TabIndex = 9;
       // 
       // historicalVolatilityInput
       // 
-      this.historicalVolatilityInput.Location = new System.Drawing.Point(114, 84);
+      this.historicalVolatilityInput.Location = new System.Drawing.Point(130, 90);
       this.historicalVolatilityInput.Name = "historicalVolatilityInput";
       this.historicalVolatilityInput.Size = new System.Drawing.Size(156, 20);
       this.historicalVolatilityInput.TabIndex = 10;
       // 
       // riskFreeRateInput
       // 
-      this.riskFreeRateInput.Location = new System.Drawing.Point(114, 110);
+      this.riskFreeRateInput.Location = new System.Drawing.Point(130, 116);
       this.riskFreeRateInput.Name = "riskFreeRateInput";
       this.riskFreeRateInput.Size = new System.Drawing.Size(156, 20);
       this.riskFreeRateInput.TabIndex = 11;
@@ -188,7 +198,7 @@
       // 
       // dividendYieldInput
       // 
-      this.dividendYieldInput.Location = new System.Drawing.Point(114, 136);
+      this.dividendYieldInput.Location = new System.Drawing.Point(130, 142);
       this.dividendYieldInput.Name = "dividendYieldInput";
       this.dividendYieldInput.Size = new System.Drawing.Size(156, 20);
       this.dividendYieldInput.TabIndex = 12;
@@ -196,9 +206,9 @@
       // 
       // button1
       // 
-      this.button1.Location = new System.Drawing.Point(12, 169);
+      this.button1.Location = new System.Drawing.Point(12, 194);
       this.button1.Name = "button1";
-      this.button1.Size = new System.Drawing.Size(257, 27);
+      this.button1.Size = new System.Drawing.Size(274, 27);
       this.button1.TabIndex = 13;
       this.button1.Text = "Calculate";
       this.button1.UseVisualStyleBackColor = true;
@@ -207,30 +217,31 @@
       // label1
       // 
       this.label1.AutoSize = true;
-      this.label1.Location = new System.Drawing.Point(12, 231);
+      this.label1.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+      this.label1.Location = new System.Drawing.Point(12, 262);
       this.label1.Name = "label1";
-      this.label1.Size = new System.Drawing.Size(60, 13);
+      this.label1.Size = new System.Drawing.Size(75, 16);
       this.label1.TabIndex = 14;
       this.label1.Text = "Show from ";
       // 
       // diagramMinPriceInput
       // 
-      this.diagramMinPriceInput.Location = new System.Drawing.Point(78, 228);
+      this.diagramMinPriceInput.Location = new System.Drawing.Point(130, 262);
       this.diagramMinPriceInput.Name = "diagramMinPriceInput";
-      this.diagramMinPriceInput.Size = new System.Drawing.Size(56, 20);
+      this.diagramMinPriceInput.Size = new System.Drawing.Size(67, 20);
       this.diagramMinPriceInput.TabIndex = 15;
       // 
       // diagramMaxPriceInput
       // 
-      this.diagramMaxPriceInput.Location = new System.Drawing.Point(156, 228);
+      this.diagramMaxPriceInput.Location = new System.Drawing.Point(219, 262);
       this.diagramMaxPriceInput.Name = "diagramMaxPriceInput";
-      this.diagramMaxPriceInput.Size = new System.Drawing.Size(56, 20);
+      this.diagramMaxPriceInput.Size = new System.Drawing.Size(67, 20);
       this.diagramMaxPriceInput.TabIndex = 16;
       // 
       // label2
       // 
       this.label2.AutoSize = true;
-      this.label2.Location = new System.Drawing.Point(140, 231);
+      this.label2.Location = new System.Drawing.Point(203, 265);
       this.label2.Name = "label2";
       this.label2.Size = new System.Drawing.Size(10, 13);
       this.label2.TabIndex = 17;
@@ -240,27 +251,64 @@
       // 
       this.thetaDecay.BackColor = System.Drawing.Color.DimGray;
       chartArea2.Area3DStyle.LightStyle = System.Windows.Forms.DataVisualization.Charting.LightStyle.Realistic;
+      chartArea2.AxisX.Title = "Days left";
       chartArea2.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (64)))), ((int) (((byte) (64)))), ((int) (((byte) (64)))));
       chartArea2.Name = "ChartArea1";
       this.thetaDecay.ChartAreas.Add(chartArea2);
       legend2.Name = "Legend1";
       this.thetaDecay.Legends.Add(legend2);
-      this.thetaDecay.Location = new System.Drawing.Point(382, 256);
+      this.thetaDecay.Location = new System.Drawing.Point(377, 288);
       this.thetaDecay.Name = "thetaDecay";
+      series4.BorderWidth = 3;
       series4.ChartArea = "ChartArea1";
       series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+      series4.Color = System.Drawing.Color.Red;
       series4.Legend = "Legend1";
       series4.Name = "optionPrice";
       this.thetaDecay.Series.Add(series4);
       this.thetaDecay.Size = new System.Drawing.Size(351, 182);
       this.thetaDecay.TabIndex = 18;
       this.thetaDecay.Text = "chart2";
+      this.thetaDecay.Click += new System.EventHandler(this.thetaDecay_Click);
+      // 
+      // label3
+      // 
+      this.label3.AutoSize = true;
+      this.label3.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+      this.label3.Location = new System.Drawing.Point(12, 169);
+      this.label3.Name = "label3";
+      this.label3.Size = new System.Drawing.Size(37, 16);
+      this.label3.TabIndex = 19;
+      this.label3.Text = "Ratio";
+      // 
+      // ratioInput
+      // 
+      this.ratioInput.Location = new System.Drawing.Point(130, 168);
+      this.ratioInput.Name = "ratioInput";
+      this.ratioInput.Size = new System.Drawing.Size(156, 20);
+      this.ratioInput.TabIndex = 20;
+      this.ratioInput.Text = "0,1";
+      // 
+      // label4
+      // 
+      this.label4.AutoSize = true;
+      this.label4.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+      this.label4.Location = new System.Drawing.Point(446, 269);
+      this.label4.Name = "label4";
+      this.label4.Size = new System.Drawing.Size(282, 16);
+      this.label4.TabIndex = 21;
+      this.label4.Text = "Time-Decay (if underlying price stays the same)";
+      this.label4.Click += new System.EventHandler(this.label4_Click);
       // 
       // Form1
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(800, 450);
+      this.BackColor = System.Drawing.Color.SlateGray;
+      this.ClientSize = new System.Drawing.Size(740, 482);
+      this.Controls.Add(this.label4);
+      this.Controls.Add(this.ratioInput);
+      this.Controls.Add(this.label3);
       this.Controls.Add(this.thetaDecay);
       this.Controls.Add(this.label2);
       this.Controls.Add(this.diagramMaxPriceInput);
@@ -301,9 +349,12 @@
     private System.Windows.Forms.Label label11;
     private System.Windows.Forms.Label label12;
     private System.Windows.Forms.Label label2;
+    private System.Windows.Forms.Label label3;
+    private System.Windows.Forms.Label label4;
     private System.Windows.Forms.Label label7;
     private System.Windows.Forms.Label label8;
     private System.Windows.Forms.Label label9;
+    private System.Windows.Forms.TextBox ratioInput;
     private System.Windows.Forms.TextBox riskFreeRateInput;
     private System.Windows.Forms.TextBox strikePriceInput;
     private System.Windows.Forms.DataVisualization.Charting.Chart thetaDecay;

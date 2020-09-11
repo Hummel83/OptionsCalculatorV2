@@ -45,32 +45,33 @@ namespace OptionsCalculatorV2
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            this.optionsCalculator.onNewCalculation(underlyingPriceInput.Text, strikePriceInput.Text, dteInput.Text, historicalVolatilityInput.Text, riskFreeRateInput.Text, dividendYieldInput.Text);
+            this.optionsCalculator.onNewCalculation(underlyingPriceInput.Text, strikePriceInput.Text, dteInput.Text, historicalVolatilityInput.Text, riskFreeRateInput.Text, dividendYieldInput.Text, ratioInput.Text);
 
             clearCharts();
 
             drawGreeksChart();
-            
 
-            /*double optionPrice = 10; //TESTING
-            thetaDecay.Series[0].Points.Clear();
-            for (int daysLeft = (int)DTE; daysLeft > 0; daysLeft--)
+            drawThetaDecayChart();
+        }
+
+        private void drawThetaDecayChart()
+        {
+            double optionPrice = optionsCalculator.getCallPrice();
+            
+            for (int daysLeft = (int)optionsCalculator.DTE; daysLeft > 0; daysLeft--)
             {
-                double theta = blackScholes.getTheta(underlyingPrice, (double)daysLeft / 365);
+                double theta = optionsCalculator.getTheta(0, (double)daysLeft);
 
                 optionPrice += theta;
-                Console.WriteLine(optionPrice);
 
                 thetaDecay.Series[0].Points.AddXY(-daysLeft, optionPrice);
-            }*/
-            
-            Console.WriteLine(optionsCalculator.getCallPrice());
+            }
         }
 
         private void drawGreeksChart()
         {
-            double showFromMinPriceInput = double.Parse(diagramMinPriceInput.Text);
-            double showFromMaxPriceInput = double.Parse(diagramMaxPriceInput.Text);
+            double showFromMinPriceInput = double.Parse(diagramMinPriceInput.Text) * optionsCalculator.ratio;
+            double showFromMaxPriceInput = double.Parse(diagramMaxPriceInput.Text) * optionsCalculator.ratio;
 
             for (int price = (int) showFromMinPriceInput; price < showFromMaxPriceInput; price++)
             {
@@ -78,9 +79,9 @@ namespace OptionsCalculatorV2
                 double gamma = optionsCalculator.getGamma(price);
                 double theta = optionsCalculator.getTheta(price);
 
-                chart1.Series[0].Points.AddXY(price, gamma);
-                chart1.Series[1].Points.AddXY(price, delta);
-                chart1.Series[2].Points.AddXY(price, theta);
+                chart1.Series[0].Points.AddXY(price / optionsCalculator.ratio, gamma);
+                chart1.Series[1].Points.AddXY(price / optionsCalculator.ratio, delta);
+                chart1.Series[2].Points.AddXY(price / optionsCalculator.ratio, theta);
 
                 Console.WriteLine($"Price: {price} / Delta: {delta} / Gamma: {gamma} / Theta: {theta}");
             }
@@ -91,10 +92,22 @@ namespace OptionsCalculatorV2
             chart1.Series[0].Points.Clear();
             chart1.Series[1].Points.Clear();
             chart1.Series[2].Points.Clear();
+            
+            thetaDecay.Series[0].Points.Clear();
         }
 
         [DllImport("kernel32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool AllocConsole();
+
+        private void thetaDecay_Click(object sender, EventArgs e)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -25,15 +25,17 @@ namespace OptionsCalculatorV2
         public double historicalVolatility { get; private set; }
         public double riskFreeRate { get; private set; }
         public double dividendYield { get; private set; }
-        
-        public void onNewCalculation(string underlyingPrice, string strikePrice, string DTE, string historicalVolatility, string riskFreeRate, string dividendYield)
+        public double ratio { get; set; }
+
+        public void onNewCalculation(string underlyingPrice, string strikePrice, string DTE, string historicalVolatility, string riskFreeRate, string dividendYield, string ratio)
         {
             convertAndSetValues();
 
             void convertAndSetValues()
             {
-                this.underlyingPrice = double.Parse(underlyingPrice);
-                this.strikePrice = double.Parse(strikePrice);
+                this.ratio = double.Parse(ratio);
+                this.underlyingPrice = double.Parse(underlyingPrice) * this.ratio;
+                this.strikePrice = double.Parse(strikePrice) * this.ratio;
                 this.DTE = double.Parse(DTE);
                 this.historicalVolatility = double.Parse(historicalVolatility) / 100;
                 this.riskFreeRate = double.Parse(riskFreeRate) / 100;
@@ -59,11 +61,12 @@ namespace OptionsCalculatorV2
             return gamma;
         }
 
-        public double getTheta(double underlyingPrice = 0)
+        public double getTheta(double underlyingPrice = 0, double daysLeft = 0)
         {
             if (underlyingPrice == 0) underlyingPrice = this.underlyingPrice;
+            if (daysLeft == 0) daysLeft = this.DTE;
 
-            double theta = BlackScholes.BlackScholes.getTheta(underlyingPrice, strikePrice, YTE, riskFreeRate, historicalVolatility, dividendYield);
+            double theta = BlackScholes.BlackScholes.getTheta(underlyingPrice, strikePrice, daysLeft / 365, riskFreeRate, historicalVolatility, dividendYield);
 
             return theta;
         }
