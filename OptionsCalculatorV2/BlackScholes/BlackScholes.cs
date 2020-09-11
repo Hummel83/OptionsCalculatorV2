@@ -5,91 +5,67 @@ namespace OptionsCalculatorV2.BlackScholes
 {
     public class BlackScholes
     {
-        public double underlyingPrice { get; }
-        public double strikePrice { get; }
-        public double DTE { get; }
-        
-        public double YTE => this.DTE / 365;
-        public double riskFreeRate { get; }
-        public double historicalVolatility { get; }
-        public double dividendYield { get; }
-
-        public BlackScholes(double underlyingPrice, double strikePrice, double dte, double riskFreeRate, double historicalVolatility, double dividendYield)
+        /// <param name="YTE">MUST BE IN YEARS!!!</param>
+        private static double calculateDOne(double underlyingPrice, double strikePrice, double YTE, double riskFreeRate, double historicalVolatility, double dividendYield)
         {
-            this.underlyingPrice = underlyingPrice;
-            this.strikePrice = strikePrice;
-            this.DTE = dte;
-            this.riskFreeRate = riskFreeRate / 100;
-            this.historicalVolatility = historicalVolatility / 100;
-            this.dividendYield = dividendYield / 100;
-        }
-        
-        /// <param name="underlyingPrice"></param>
-        /// <param name="strikePrice"></param>
-        /// <param name="time">MUST BE IN YEARS!!!</param>
-        /// <param name="interest"></param>
-        /// <param name="volatility"></param>
-        /// <param name="dividend"></param>
-        /// <returns></returns>
-        private double calculateDOne(double underlyingPrice, double strikePrice, double time, double interest, double volatility, double dividend)
-        {
-            double dOne = (Math.Log(underlyingPrice / strikePrice) + (interest - dividend + 0.5 * Math.Pow(volatility, 2)) * time) / (volatility * Math.Sqrt(time));
+            double dOne = (Math.Log(underlyingPrice / strikePrice) + (riskFreeRate - dividendYield + 0.5 * Math.Pow(historicalVolatility, 2)) * YTE) / (historicalVolatility * Math.Sqrt(YTE));
 
             return dOne;
         }
 
-        private double calculateNdOne(double underlyingPrice, double strikePrice, double time, double interest, double volatility, double dividend)
+        private static double calculateNdOne(double underlyingPrice, double strikePrice, double YTE, double riskFreeRate, double historicalVolatility, double dividendYield)
         {
-            double dOne = this.calculateDOne(underlyingPrice, strikePrice, time, interest, volatility, dividend);
+            double dOne = calculateDOne(underlyingPrice, strikePrice, YTE, riskFreeRate, historicalVolatility, dividendYield);
             
             double NdOne = Math.Exp(-(Math.Pow(dOne, 2) / 2)) / (Math.Sqrt(2 * Math.PI));
 
             return NdOne;
         }
 
-        private double calculateDTwo(double underlyingPrice, double strikePrice, double time, double interest, double volatility, double dividend)
+        private static double calculateDTwo(double underlyingPrice, double strikePrice, double YTE, double riskFreeRate, double historicalVolatility, double dividendYield)
         {
-            double DOne = this.calculateDOne(underlyingPrice, strikePrice, time, interest, volatility, dividend) - volatility * Math.Sqrt(time);
+            double DOne = calculateDOne(underlyingPrice, strikePrice, YTE, riskFreeRate, historicalVolatility, dividendYield) - historicalVolatility * Math.Sqrt(YTE);
 
             return DOne;
         }
 
-        private double calculateNdTwo(double underlyingPrice, double strikePrice, double time, double interest, double volatility, double dividend)
+        private static double calculateNdTwo(double underlyingPrice, double strikePrice, double YTE, double riskFreeRate, double historicalVolatility, double dividendYield)
         {
-            double NdTwo = NormSDist.N(this.calculateDTwo(underlyingPrice, strikePrice, time, interest, volatility, dividend));
+            double NdTwo = NormSDist.N(calculateDTwo(underlyingPrice, strikePrice, YTE, riskFreeRate, historicalVolatility, dividendYield));
 
             return NdTwo;
         }
         
-        /// <param name="underlyingPrice">Default is used if no param is given</param>
-        /// <returns></returns>
-        public double getDelta(double underlyingPrice = 0)
+        public static double getDelta(double underlyingPrice, double strikePrice, double YTE, double riskFreeRate, double historicalVolatility, double dividendYield)
         {
             double delta = NormSDist.N(calculateDOne(underlyingPrice, strikePrice, YTE, riskFreeRate, historicalVolatility, dividendYield));
 
             return delta;
         }
 
-        public double getGamma(double underlyingPrice = 0)
+        public static double getGamma(double underlyingPrice, double strikePrice, double YTE, double riskFreeRate, double historicalVolatility, double dividendYield)
         {
-            if (underlyingPrice == 0) underlyingPrice = this.underlyingPrice;
-            
-            double gamma = this.calculateNdOne(underlyingPrice, strikePrice, YTE, riskFreeRate, historicalVolatility, dividendYield);
+            double gamma = calculateNdOne(underlyingPrice, strikePrice, YTE, riskFreeRate, historicalVolatility, dividendYield);
 
             return gamma;
         }
 
-        public double getTheta(double underlyingPrice = 0, double YTE = 0)
+        public static double getTheta(double underlyingPrice, double strikePrice, double YTE, double riskFreeRate, double historicalVolatility, double dividendYield)
         {
-            if (underlyingPrice == 0) underlyingPrice = this.underlyingPrice;
-            if (YTE == 0) YTE = this.YTE;
-            
-            double ndOne = this.calculateNdOne(underlyingPrice, strikePrice, YTE, riskFreeRate, historicalVolatility, dividendYield);
-            double ndTwo = this.calculateNdTwo(underlyingPrice, strikePrice, YTE, riskFreeRate, historicalVolatility, dividendYield);
+            double ndOne = calculateNdOne(underlyingPrice, strikePrice, YTE, riskFreeRate, historicalVolatility, dividendYield);
+            double ndTwo = calculateNdTwo(underlyingPrice, strikePrice, YTE, riskFreeRate, historicalVolatility, dividendYield);
             
             double theta = -(underlyingPrice * historicalVolatility * ndOne) / (2 * Math.Sqrt(YTE)) - riskFreeRate * strikePrice * Math.Pow(-riskFreeRate * (YTE), 2) * ndTwo;
 
             return theta / 365;
+        }
+
+        public static double getCallPrice(double underlyingPrice, double strikePrice, double YTE, double riskFreeRate, double historicalVolatility, double dividendYield)
+        {
+            double callOption = Math.Exp(-dividendYield * YTE) * underlyingPrice * NormSDist.N(calculateDOne(underlyingPrice, strikePrice, YTE, riskFreeRate, historicalVolatility, dividendYield)) - strikePrice * Math.Exp(-riskFreeRate * YTE) *
+                NormSDist.N(calculateDOne(underlyingPrice, strikePrice, YTE, riskFreeRate, historicalVolatility, dividendYield) - historicalVolatility * Math.Sqrt(YTE));
+
+            return callOption;
         }
     }
 }

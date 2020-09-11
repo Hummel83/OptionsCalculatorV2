@@ -14,6 +14,8 @@ namespace OptionsCalculatorV2
 {
     public partial class Form1 : Form
     {
+        private OptionsCalculator optionsCalculator;
+        
         public Form1()
         {
             InitializeComponent();
@@ -38,41 +40,57 @@ namespace OptionsCalculatorV2
         private void Form1_Load(object sender, EventArgs e)
         {
             AllocConsole();
+            this.optionsCalculator = OptionsCalculator.getInstance();
         }
 
         private void button1_Click_1(object sender, EventArgs e)
         {
+            this.optionsCalculator.onNewCalculation(underlyingPriceInput.Text, strikePriceInput.Text, dteInput.Text, historicalVolatilityInput.Text, riskFreeRateInput.Text, dividendYieldInput.Text);
+
+            clearCharts();
+
+            drawGreeksChart();
+            
+
+            /*double optionPrice = 10; //TESTING
+            thetaDecay.Series[0].Points.Clear();
+            for (int daysLeft = (int)DTE; daysLeft > 0; daysLeft--)
+            {
+                double theta = blackScholes.getTheta(underlyingPrice, (double)daysLeft / 365);
+
+                optionPrice += theta;
+                Console.WriteLine(optionPrice);
+
+                thetaDecay.Series[0].Points.AddXY(-daysLeft, optionPrice);
+            }*/
+            
+            Console.WriteLine(optionsCalculator.getCallPrice());
+        }
+
+        private void drawGreeksChart()
+        {
+            double showFromMinPriceInput = double.Parse(diagramMinPriceInput.Text);
+            double showFromMaxPriceInput = double.Parse(diagramMaxPriceInput.Text);
+
+            for (int price = (int) showFromMinPriceInput; price < showFromMaxPriceInput; price++)
+            {
+                double delta = optionsCalculator.getDelta(price);
+                double gamma = optionsCalculator.getGamma(price);
+                double theta = optionsCalculator.getTheta(price);
+
+                chart1.Series[0].Points.AddXY(price, gamma);
+                chart1.Series[1].Points.AddXY(price, delta);
+                chart1.Series[2].Points.AddXY(price, theta);
+
+                Console.WriteLine($"Price: {price} / Delta: {delta} / Gamma: {gamma} / Theta: {theta}");
+            }
+        }
+
+        private void clearCharts()
+        {
             chart1.Series[0].Points.Clear();
             chart1.Series[1].Points.Clear();
-
-            double underlyingPrice = double.Parse(underlyingPriceInput.Text);
-            double strikePrice = double.Parse(strikePriceInput.Text);
-            double DTE = double.Parse(dteInput.Text);
-            double historicalVolatility = double.Parse(historicalVolatilityInput.Text);
-            double riskFreeRate = double.Parse(riskFreeRateInput.Text);
-            double dividendYield = double.Parse(dividendYieldInput.Text);
-
-            BlackScholes.BlackScholes blackScholes = new BlackScholes.BlackScholes(underlyingPrice, strikePrice, DTE, riskFreeRate, historicalVolatility, dividendYield);
-
-            double showFromMin = double.Parse(diagramMinPriceInput.Text);
-            double showFromMax = double.Parse(diagramMaxPriceInput.Text);
-
-            for (int price = (int) showFromMin; price < showFromMax; price++)
-            {
-                double delta = blackScholes.getDelta(price);
-                double gamma = blackScholes.getGamma(price);
-
-                delta = delta > 1 ? 1 : delta;
-                delta = delta < 0 ? 0 : delta;
-
-                gamma = gamma > 1 ? 1 : gamma;
-                gamma = gamma < 0 ? 0 : gamma;
-
-                chart1.Series[1].Points.AddXY(price, delta);
-                chart1.Series[0].Points.AddXY(price, gamma);
-
-                Console.WriteLine($"Price: {price} / Delta: {delta} / Gamma: {gamma}");
-            }
+            chart1.Series[2].Points.Clear();
         }
 
         [DllImport("kernel32.dll", SetLastError = true)]

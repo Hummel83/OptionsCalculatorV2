@@ -32,6 +32,10 @@
       System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
       System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
       System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+      System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+      System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+      System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+      System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
       this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
       this.label7 = new System.Windows.Forms.Label();
       this.label8 = new System.Windows.Forms.Label();
@@ -50,7 +54,9 @@
       this.diagramMinPriceInput = new System.Windows.Forms.TextBox();
       this.diagramMaxPriceInput = new System.Windows.Forms.TextBox();
       this.label2 = new System.Windows.Forms.Label();
+      this.thetaDecay = new System.Windows.Forms.DataVisualization.Charting.Chart();
       ((System.ComponentModel.ISupportInitialize) (this.chart1)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize) (this.thetaDecay)).BeginInit();
       this.SuspendLayout();
       // 
       // chart1
@@ -76,8 +82,15 @@
       series2.Name = "delta";
       series2.ShadowColor = System.Drawing.Color.Black;
       series2.ShadowOffset = 3;
+      series3.BorderWidth = 3;
+      series3.ChartArea = "ChartArea1";
+      series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+      series3.Color = System.Drawing.Color.DarkRed;
+      series3.Legend = "Legend1";
+      series3.Name = "theta";
       this.chart1.Series.Add(series1);
       this.chart1.Series.Add(series2);
+      this.chart1.Series.Add(series3);
       this.chart1.Size = new System.Drawing.Size(351, 182);
       this.chart1.TabIndex = 0;
       this.chart1.Text = "chart1";
@@ -223,11 +236,32 @@
       this.label2.TabIndex = 17;
       this.label2.Text = "-\r\n";
       // 
+      // thetaDecay
+      // 
+      this.thetaDecay.BackColor = System.Drawing.Color.DimGray;
+      chartArea2.Area3DStyle.LightStyle = System.Windows.Forms.DataVisualization.Charting.LightStyle.Realistic;
+      chartArea2.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (64)))), ((int) (((byte) (64)))), ((int) (((byte) (64)))));
+      chartArea2.Name = "ChartArea1";
+      this.thetaDecay.ChartAreas.Add(chartArea2);
+      legend2.Name = "Legend1";
+      this.thetaDecay.Legends.Add(legend2);
+      this.thetaDecay.Location = new System.Drawing.Point(382, 256);
+      this.thetaDecay.Name = "thetaDecay";
+      series4.ChartArea = "ChartArea1";
+      series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+      series4.Legend = "Legend1";
+      series4.Name = "optionPrice";
+      this.thetaDecay.Series.Add(series4);
+      this.thetaDecay.Size = new System.Drawing.Size(351, 182);
+      this.thetaDecay.TabIndex = 18;
+      this.thetaDecay.Text = "chart2";
+      // 
       // Form1
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(800, 450);
+      this.Controls.Add(this.thetaDecay);
       this.Controls.Add(this.label2);
       this.Controls.Add(this.diagramMaxPriceInput);
       this.Controls.Add(this.diagramMinPriceInput);
@@ -250,6 +284,7 @@
       this.Text = "Gescheiter Options-Rechner";
       this.Load += new System.EventHandler(this.Form1_Load);
       ((System.ComponentModel.ISupportInitialize) (this.chart1)).EndInit();
+      ((System.ComponentModel.ISupportInitialize) (this.thetaDecay)).EndInit();
       this.ResumeLayout(false);
       this.PerformLayout();
     }
@@ -271,6 +306,7 @@
     private System.Windows.Forms.Label label9;
     private System.Windows.Forms.TextBox riskFreeRateInput;
     private System.Windows.Forms.TextBox strikePriceInput;
+    private System.Windows.Forms.DataVisualization.Charting.Chart thetaDecay;
     private System.Windows.Forms.TextBox underlyingPriceInput;
 
     #endregion
