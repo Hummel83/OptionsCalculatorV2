@@ -12,6 +12,7 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -51,6 +52,7 @@
   <ItemGroup>
     <Compile Include="BlackScholes\BlackScholes.cs" />
     <Compile Include="BlackScholes\NormSDist.cs" />
+    <Compile Include="ChartSize.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

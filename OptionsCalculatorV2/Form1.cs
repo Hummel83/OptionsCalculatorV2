@@ -14,38 +14,35 @@ namespace OptionsCalculatorV2
 {
     public partial class Form1 : Form
     {
-        private OptionsCalculator optionsCalculator;
-        
+        #region init
+
         public Form1()
         {
             InitializeComponent();
         }
 
-        private void chart1_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-        }
-
         private void Form1_Load(object sender, EventArgs e)
         {
-            AllocConsole();
+            //AllocConsole();
             this.optionsCalculator = OptionsCalculator.getInstance();
         }
 
+        #endregion init
+
+        private OptionsCalculator optionsCalculator;
+
         private void button1_Click_1(object sender, EventArgs e)
         {
-            this.optionsCalculator.onNewCalculation(underlyingPriceInput.Text, strikePriceInput.Text, dteInput.Text, historicalVolatilityInput.Text, riskFreeRateInput.Text, dividendYieldInput.Text, ratioInput.Text);
+            this.optionsCalculator.onNewCalculation(underlyingPriceInput.Text, strikePriceInput.Text, dteInput.Text, historicalVolatilityInput.Text, riskFreeRateInput.Text, dividendYieldInput.Text, ratioInput.Text, bidPriceInput.Text);
+
+            refreshGUI();
+        }
+        
+        
+
+        private void refreshGUI()
+        {
+            if (!areOptionInputsFilled()) return;
 
             clearCharts();
 
@@ -56,6 +53,21 @@ namespace OptionsCalculatorV2
             drawThetaDecayChart();
 
             this.IVOutput.Text = (optionsCalculator.getIV(double.Parse(bidPriceInput.Text)) * 100).ToString();
+        }
+
+        private bool areOptionInputsFilled()
+        {
+            return !string.IsNullOrWhiteSpace(underlyingPriceInput.Text) &&
+                   !string.IsNullOrWhiteSpace(strikePriceInput.Text) &&
+                   !string.IsNullOrWhiteSpace(dteInput.Text) &&
+                   !string.IsNullOrWhiteSpace(historicalVolatilityInput.Text) &&
+                   !string.IsNullOrWhiteSpace(riskFreeRateInput.Text) &&
+                   !string.IsNullOrWhiteSpace(dividendYieldInput.Text) &&
+                   !string.IsNullOrWhiteSpace(ratioInput.Text);
+        }
+
+        #region charts
+
         private void drawOmegaChart()
         {
             ChartSize chartSize = getChartSize();
@@ -71,10 +83,12 @@ namespace OptionsCalculatorV2
         private void drawThetaDecayChart()
         {
             double optionPrice = optionsCalculator.getCallPrice();
-            
-            for (int daysLeft = (int)optionsCalculator.DTE; daysLeft > 0; daysLeft--)
+
+            for (int daysLeft = (int) optionsCalculator.DTE; daysLeft > 0; daysLeft--)
             {
-                double theta = optionsCalculator.getTheta(0, (double)daysLeft);
+                if (daysLeft == optionsCalculator.DTE) continue;
+                
+                double theta = optionsCalculator.getTheta(0, (double) daysLeft);
 
                 optionPrice += theta;
 
@@ -84,18 +98,17 @@ namespace OptionsCalculatorV2
 
         private void drawGreeksChart()
         {
-            double showFromMinPriceInput = double.Parse(diagramMinPriceInput.Text) * optionsCalculator.ratio;
-            double showFromMaxPriceInput = double.Parse(diagramMaxPriceInput.Text) * optionsCalculator.ratio;
-
-            for (int price = (int) showFromMinPriceInput; price < showFromMaxPriceInput; price++)
+            ChartSize chartSize = getChartSize();
+            
+            for (int price = (int) chartSize.chartStart; price < chartSize.chartEnd; price++)
             {
                 double delta = optionsCalculator.getDelta(price);
                 double gamma = optionsCalculator.getGamma(price);
                 double theta = optionsCalculator.getTheta(price);
 
-                chart1.Series[0].Points.AddXY(price / optionsCalculator.ratio, gamma);
-                chart1.Series[1].Points.AddXY(price / optionsCalculator.ratio, delta);
-                chart1.Series[2].Points.AddXY(price / optionsCalculator.ratio, theta);
+                chart1.Series[0].Points.AddXY(price, gamma);
+                chart1.Series[1].Points.AddXY(price, delta);
+                chart1.Series[2].Points.AddXY(price, theta);
 
                 Console.WriteLine($"Price: {price} / Delta: {delta} / Gamma: {gamma} / Theta: {theta}");
             }
@@ -106,22 +119,51 @@ namespace OptionsCalculatorV2
             chart1.Series[0].Points.Clear();
             chart1.Series[1].Points.Clear();
             chart1.Series[2].Points.Clear();
-            
+
+            omegaChart.Series[0].Points.Clear();
+
             thetaDecay.Series[0].Points.Clear();
         }
 
+        private ChartSize getChartSize()
+        {
+            double chartStart;
+            double chartEnd;
+
+            if (optionsCalculator.strikePrice > optionsCalculator.underlyingPrice)
+            {
+                chartEnd = optionsCalculator.strikePrice;
+                chartStart = optionsCalculator.underlyingPrice;
+            }
+            else
+            {
+                chartStart = optionsCalculator.strikePrice;
+                chartEnd = optionsCalculator.underlyingPrice;
+            }
+
+            ChartSize chartSize = new ChartSize(chartStart, chartEnd);
+
+            return chartSize;
+        }
+
+        #endregion charts
+        
+        #region inputChanged
+        private void onOptionTextInputChanged(object sender, EventArgs e)
+        {
+            if (areOptionInputsFilled())
+            {
+                this.optionsCalculator.onNewCalculation(underlyingPriceInput.Text, strikePriceInput.Text, dteInput.Text, historicalVolatilityInput.Text, riskFreeRateInput.Text, dividendYieldInput.Text, ratioInput.Text, bidPriceInput.Text);
+                
+                refreshGUI();
+            }
+        }
+        #endregion
+        
         [DllImport("kernel32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool AllocConsole();
 
-        private void thetaDecay_Click(object sender, EventArgs e)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        private void label4_Click(object sender, EventArgs e)
-        {
-            throw new System.NotImplementedException();
-        }
+        
     }
 }
