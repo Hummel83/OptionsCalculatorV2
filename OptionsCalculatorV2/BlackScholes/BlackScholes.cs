@@ -78,5 +78,29 @@ namespace OptionsCalculatorV2.BlackScholes
 
             return callOption;
         }
+
+        public static double getIV(double underlyingPrice, double strikePrice, double YTE, double riskFreeRate, double marketPrice, double dividendYield)
+        {
+            double high = 5;
+            double low = 0;
+
+            while ((high - low) > 0.0001)
+            {
+                double callPrice = getCallPrice(underlyingPrice, strikePrice, YTE, riskFreeRate, (high + low) / 2, dividendYield);
+
+                if (callPrice > marketPrice)
+                {
+                    high = (high + low) / 2;
+                }
+                else
+                {
+                    low = (high + low) / 2;
+                }
+            }
+
+            double impliedVolatility = (high + low) / 2;
+
+            return impliedVolatility;
+        }
     }
 }

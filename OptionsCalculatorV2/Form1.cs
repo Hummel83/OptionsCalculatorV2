@@ -51,7 +51,11 @@ namespace OptionsCalculatorV2
 
             drawGreeksChart();
 
+            drawOmegaChart();
+
             drawThetaDecayChart();
+
+            this.IVOutput.Text = (optionsCalculator.getIV(double.Parse(bidPriceInput.Text)) * 100).ToString();
         private void drawOmegaChart()
         {
             ChartSize chartSize = getChartSize();
