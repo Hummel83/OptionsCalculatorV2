@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Windows.Forms.VisualStyles;
 
 namespace OptionsCalculatorV2.BlackScholes
@@ -16,7 +17,7 @@ namespace OptionsCalculatorV2.BlackScholes
         private static double calculateNdOne(double underlyingPrice, double strikePrice, double YTE, double riskFreeRate, double historicalVolatility, double dividendYield)
         {
             double dOne = calculateDOne(underlyingPrice, strikePrice, YTE, riskFreeRate, historicalVolatility, dividendYield);
-            
+
             double NdOne = Math.Exp(-(Math.Pow(dOne, 2) / 2)) / (Math.Sqrt(2 * Math.PI));
 
             return NdOne;
@@ -35,7 +36,7 @@ namespace OptionsCalculatorV2.BlackScholes
 
             return NdTwo;
         }
-        
+
         public static double getDelta(double underlyingPrice, double strikePrice, double YTE, double riskFreeRate, double historicalVolatility, double dividendYield)
         {
             double delta = NormSDist.N(calculateDOne(underlyingPrice, strikePrice, YTE, riskFreeRate, historicalVolatility, dividendYield));
@@ -54,10 +55,20 @@ namespace OptionsCalculatorV2.BlackScholes
         {
             double ndOne = calculateNdOne(underlyingPrice, strikePrice, YTE, riskFreeRate, historicalVolatility, dividendYield);
             double ndTwo = calculateNdTwo(underlyingPrice, strikePrice, YTE, riskFreeRate, historicalVolatility, dividendYield);
-            
+
             double theta = -(underlyingPrice * historicalVolatility * ndOne) / (2 * Math.Sqrt(YTE)) - riskFreeRate * strikePrice * Math.Pow(-riskFreeRate * (YTE), 2) * ndTwo;
 
             return theta / 365;
+        }
+
+        public static double getOmega(double underlyingPrice, double strikePrice, double YTE, double riskFreeRate, double historicalVolatility, double dividendYield)
+        {
+            double delta = getDelta(underlyingPrice, strikePrice, YTE, riskFreeRate, historicalVolatility, dividendYield);
+            double callPrice = getCallPrice(underlyingPrice, strikePrice, YTE, riskFreeRate, historicalVolatility, dividendYield);
+
+            double omega = (underlyingPrice * delta) / callPrice;
+
+            return omega;
         }
 
         public static double getCallPrice(double underlyingPrice, double strikePrice, double YTE, double riskFreeRate, double historicalVolatility, double dividendYield)

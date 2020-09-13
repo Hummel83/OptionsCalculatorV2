@@ -52,6 +52,16 @@ namespace OptionsCalculatorV2
             drawGreeksChart();
 
             drawThetaDecayChart();
+        private void drawOmegaChart()
+        {
+            ChartSize chartSize = getChartSize();
+            
+            for (int price = (int) chartSize.chartStart; price < chartSize.chartEnd; price++)
+            {
+                double omega = optionsCalculator.getOmega(price);
+
+                omegaChart.Series[0].Points.AddXY(price, omega);
+            }
         }
 
         private void drawThetaDecayChart()

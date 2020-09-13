@@ -69,6 +69,13 @@ namespace OptionsCalculatorV2
             double theta = BlackScholes.BlackScholes.getTheta(underlyingPrice, strikePrice, daysLeft / 365, riskFreeRate, historicalVolatility, dividendYield);
 
             return theta;
+        public double getOmega(double underlyingPrice = 0)
+        {
+            if (underlyingPrice == 0) underlyingPrice = this.underlyingPrice;
+
+            double omega = BlackScholes.BlackScholes.getOmega(underlyingPrice, strikePrice, YTE, riskFreeRate, historicalVolatility, dividendYield);
+
+            return omega; //omegalul
         }
 
         public double getCallPrice()
